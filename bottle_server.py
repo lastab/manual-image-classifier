@@ -27,6 +27,9 @@ def root():
 
 @route('/image_question/<index>')
 def index(index):
+  total_cirrus_images = file_count('./data_images/classified/cirrus/')
+  total_cumulus_images = file_count('./data_images/classified/cumulus/')
+  total_mixed_images = file_count('./data_images/classified/mixed/')
   return template("""
   <a href="/add_as_cirrus/{{index}}">Cirrus</a>
   &nbsp;
@@ -51,7 +54,7 @@ def index(index):
 def serve_pictures(index):
   image_file_name = filtered_images[int(index)]
   print(image_file_name)
-  return static_file(image_file_name, root='./data_images/2015/' + image_file_name[:8])
+  return static_file(image_file_name, root='./data_images/2017/' + image_file_name[:8])
 
 @route('/add_as_cirrus/<index>')
 def add_as_cirrus(index):
@@ -74,7 +77,7 @@ def add_as_mixed(index):
 def move(index, type):
   # add_as_mixed
   image_file_name = filtered_images[int(index)]
-  os.system("cp ./data_images/2015/"+  image_file_name[:8] + '/' + image_file_name +" ./data_images/classified/"+ type +"/" + image_file_name)
+  os.system("cp ./data_images/2017/"+  image_file_name[:8] + '/' + image_file_name +" ./data_images/classified/"+ type +"/" + image_file_name)
 
   redirect("/image_question/" + str(int(index)+1))
 
@@ -83,7 +86,7 @@ def get_image_list():
 
 
 def get_image_between_ten_to_one():
-  for dirpath, dirnames, filenames in os.walk("./data_images/2015"):
+  for dirpath, dirnames, filenames in os.walk("./data_images/2017"):
     for filename in [f for f in filenames if f.endswith(".jpg") and time_from_file_name(f) >= 100000 and time_from_file_name(f) <= 130000]:
           filtered_images.append(filename)
 
